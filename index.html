@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Pemesanan Makanan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .menu-group {
+            margin-bottom: 20px;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+        .quantity-control button {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+        .quantity-control button:hover {
+            background-color: #1DA851;
+        }
+        .cart {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f4f4f4;
+        }
+        .cart-items {
+            list-style: none;
+            padding: 0;
+        }
+        .cart-items li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .checkout {
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Menu Pemesanan</h1>
+        <div class="input-group">
+            <label for="customer-name">Nama Anda:</label>
+            <input type="text" id="customer-name" placeholder="Masukkan nama Anda">
+        </div>
+        <div class="input-group">
+            <label for="table-position">Pilih Posisi Meja:</label>
+            <select id="table-position">
+                <option value="Lt 1 Kaca">Lt 1 Kaca</option>
+                <option value="Lt 1 Tangga">Lt 1 Tangga</option>
+                <option value="Lt 2 Kaca">Lt 2 Kaca</option>
+                <option value="Lt 2 Tangga">Lt 2 Tangga</option>
+                <option value="Rooftop">Rooftop</option>
+            </select>
+        </div>
+        
+        <div class="menu-group">
+            <h3>Makanan</h3>
+            <div class="menu-item">
+                <span>Nasi Goreng - Rp15,000</span>
+                <div class="quantity-control">
+                    <button onclick="kurangiJumlah('Nasi Goreng', 15000)">-</button>
+                    <span id="qty-Nasi Goreng">0</span>
+                    <button onclick="tambahKeKeranjang('Nasi Goreng', 15000)">+</button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <span>Mie Ayam - Rp12,000</span>
+                <div class="quantity-control">
+                    <button onclick="kurangiJumlah('Mie Ayam', 12000)">-</button>
+                    <span id="qty-Mie Ayam">0</span>
+                    <button onclick="tambahKeKeranjang('Mie Ayam', 12000)">+</button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <span>Ayam Geprek - Rp18,000</span>
+                <div class="quantity-control">
+                    <button onclick="kurangiJumlah('Ayam Geprek', 18000)">-</button>
+                    <span id="qty-Ayam Geprek">0</span>
+                    <button onclick="tambahKeKeranjang('Ayam Geprek', 18000)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-group">
+            <h3>Minuman</h3>
+            <div class="menu-item">
+                <span>Es Teh Manis - Rp5,000</span>
+                <div class="quantity-control">
+                    <button onclick="kurangiJumlah('Es Teh Manis', 5000)">-</button>
+                    <span id="qty-Es Teh Manis">0</span>
+                    <button onclick="tambahKeKeranjang('Es Teh Manis', 5000)">+</button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <span>Jus Jeruk - Rp10,000</span>
+                <div class="quantity-control">
+                    <button onclick="kurangiJumlah('Jus Jeruk', 10000)">-</button>
+                    <span id="qty-Jus Jeruk">0</span>
+                    <button onclick="tambahKeKeranjang('Jus Jeruk', 10000)">+</button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <span>Air Mineral - Rp3,000</span>
+                <div class="quantity-control">
+                    <button onclick="kurangiJumlah('Air Mineral', 3000)">-</button>
+                    <span id="qty-Air Mineral">0</span>
+                    <button onclick="tambahKeKeranjang('Air Mineral', 3000)">+</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cart">
+            <h2>Keranjang Pesanan</h2>
+            <ul id="cart-items" class="cart-items"></ul>
+            <div class="checkout">
+                <strong>Total: Rp<span id="total-harga">0</span></strong>
+                <br>
+                <button onclick="checkout()">Pesan Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const nomorTujuan = '6282258190069'; // Ganti dengan nomor WhatsApp tujuan tanpa + atau spasi
+        const keranjang = {};
+
+        function tambahKeKeranjang(nama, harga) {
+            if (!keranjang[nama]) {
+                keranjang[nama] = { jumlah: 0, harga };
+            }
+            keranjang[nama].jumlah++;
+            document.getElementById(`qty-${nama}`).innerText = keranjang[nama].jumlah;
+            tampilkanKeranjang();
+        }
+
+        function kurangiJumlah(nama, harga) {
+            if (keranjang[nama] && keranjang[nama].jumlah > 0) {
+                keranjang[nama].jumlah--;
+                document.getElementById(`qty-${nama}`).innerText = keranjang[nama].jumlah;
+                if (keranjang[nama].jumlah === 0) delete keranjang[nama];
+                tampilkanKeranjang();
+            }
+        }
+
+        function tampilkanKeranjang() {
+            const cartItems = document.getElementById('cart-items');
+            const totalHarga = document.getElementById('total-harga');
+            cartItems.innerHTML = '';
+
+            let total = 0;
+            for (let nama in keranjang) {
+                const item = keranjang[nama];
+                total += item.harga * item.jumlah;
+                cartItems.innerHTML += `<li>${nama} x${item.jumlah} - Rp${item.harga * item.jumlah}</li>`;
+            }
+            totalHarga.textContent = total;
+        }
+
+        function checkout() {
+            const customerName = document.getElementById('customer-name').value.trim();
+            const tablePosition = document.getElementById('table-position').value;
+
+            if (!customerName) {
+                alert('Harap masukkan nama Anda.');
+                return;
+            }
+
+            if (Object.keys(keranjang).length === 0) {
+                alert('Keranjang masih kosong!');
+                return;
+            }
+
+            let pesan = `Halo, saya *${customerName}* ingin memesan dari posisi meja *${tablePosition}*:\n`;
+            let total = 0;
+            for (let nama in keranjang) {
+                const item = keranjang[nama];
+                pesan += `\n*${nama}* x${item.jumlah} - Rp${item.harga * item.jumlah}`;
+                total += item.harga * item.jumlah;
+            }
+            pesan += `\n\nTotal Harga: Rp${total}\n\nTerima kasih!`;
+            const urlWhatsApp = `https://wa.me/${nomorTujuan}?text=${encodeURIComponent(pesan)}`;
+            window.open(urlWhatsApp, '_blank');
+        }
+    </script>
+</body>
+</html>
